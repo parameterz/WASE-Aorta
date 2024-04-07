@@ -7,35 +7,44 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
   <body>
-    <h2>Please Enter Your Height, BSA, and Select Data to Visualize</h2>
+    <h2>WASE Aortic Root Normal Values Visualizer</h2>
     <form id="dataForm">
-      <label for="height">Height (cm):</label>
-      <input
-        type="number"
-        id="height"
-        name="height"
-        placeholder="Enter height in centimeters"
-        required
-      />
 
-      <label for="bsa">Body Surface Area (m²):</label>
-      <input
-        type="number"
-        id="bsa"
-        name="bsa"
-        placeholder="Enter body surface area in square meters"
-        step="0.01"
-        required
-      />
-
-      <label for="data">Select Data to Visualize:</label>
-      <select id="data" name="data">
-        <option value="ann">Aortic Annulus (Ann)</option>
-        <option value="sov">Aortic Sinuses of Valsalva (SOV)</option>
-        <option value="stj">Aortic Sinotubular Junction (STJ)</option>
+      <label for="visualizationSelect">Select Visualization:</label>
+      <select
+        id="visualizationSelect"
+        name="visualizationSelect"
+      >
+        <option value="generic">Compare Genders</option>
+        <optgroup label="Compare Gender & Race">
+          <option value="race.female">Compare Females by Race</option>
+          <option value="race.male">Compare Males by Race</option>
+        </optgroup>
+        <optgroup label="Compare Gender & Age">
+          <option value="age.female">Compare Females by Age</option>
+          <option value="age.male">Compare Males by Age</option>
+        </optgroup>
       </select>
 
-      <button type="submit">Submit</button>
+      <label for="site">Select Aortic Site:</label>
+      <select id="site" name="site">
+        <optgroup label="Aortic Annulus (AOV)">
+          <option value="aov.bsa">AOV: Indexed to BSA</option>
+          <option value="aov.ht">AOV: Indexed to Height</option>
+          <option value="aov.ht213">AOV: Indexed to Allometric Height</option>
+        <optgroup label="Aortic Sinuses of Valsalva (SOV)">
+          <option value="sov.bsa">SOV: Indexed to BSA</option>
+          <option value="sov.ht">SOV: Indexed to Height</option>
+          <option value="sov.ht213">SOV: Indexed to Allometric Height</option>
+        </optgroup>
+        <optgroup label="Aortic Sinotubular Junction (STJ)">
+          <option value="stj.bsa">STJ: Indexed to BSA</option>
+          <option value="stj.ht">STJ: Indexed to Height</option>
+          <option value="stj.ht213">STJ: Indexed to Allometric Height</option>
+        </optgroup>
+      </select>
+
+      <button>Update</button>
     </form>
     <div>
       <h2>Chart</h2>

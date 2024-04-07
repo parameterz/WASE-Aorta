@@ -1,23 +1,38 @@
 $(document).ready(function () {
-  $("#dataForm").submit(function (event) {
-    event.preventDefault(); // Prevent form submission
 
-    // Get the values entered by the user
-    const height = parseFloat($("#height").val());
-    const bsa = parseFloat($("#bsa").val());
-    const selectedData = $("#data").val();
+  // Define the generatePlotData function
+  function generatePlotData() {
+    // get the visualization and site info
+    var visualization = $('#visualizationSelect').val();
+    var site = $('#site').val();
+    console.log(visualization, site);
+    
 
-    // Validate the input
-    if (isNaN(height) || isNaN(bsa)) {
-      alert("Please enter valid numeric values for height and BSA.");
-      return;
+  }
+
+
+  // Function to update site select options based on visualization selection
+  $("#visualizationSelect").change(function() {
+    var selectedVisualization = $(this).val();
+    var siteSelect = $("#site");
+
+    // Reset disabled options
+    siteSelect.find("option").prop("disabled", false);
+
+    // Disable options related to "Indexed to Allometric Height" if not "generic"
+    if (selectedVisualization !== "generic") {
+      siteSelect.find("option[value$='.ht213']").prop("disabled", true);
     }
+    generatePlotData();
 
-    // Use the entered values and selected data for further processing (e.g., chart generation)
-    console.log("Height:", height, "cm");
-    console.log("BSA:", bsa, "m²");
-    console.log("Selected Data:", selectedData);
-
-    // You can perform further actions here, such as generating charts based on the user input
   });
+
+  $('#site').change(function() {
+    generatePlotData();
+  });
+
+  // Trigger change event initially to set initial state
+  $("#visualizationSelect").change();
+
+
 });
