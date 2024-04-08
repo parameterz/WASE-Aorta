@@ -306,7 +306,7 @@ function generateGenericChart(site, index) {
 //detail charts (race or age)
 function generateDetailChart(gender, detail, site, index) {
   index = indexType[index]; //gets the long description used in the model
-  console.log(gender, detail, site, index);
+  //console.log(gender, detail, site, index);
   //either by race or age, there will be three datasets to compare
   const ages = ["18-40", "41-65", ">65"];
   const races = ["Asian", "Black", "White"];
@@ -337,7 +337,21 @@ function generateDetailChart(gender, detail, site, index) {
     });
   });
   //console.log(chartData);
+  // JS - Destroy exiting Chart Instance to reuse <canvas> element
+  let chartStatus = Chart.getChart("myChart"); // <canvas> id
+  if (chartStatus != undefined) {
+    chartStatus.destroy();
+  }
+  //-- End of chart destroy
 
+  const ctx = document.getElementById("myChart").getContext("2d");
+  const myChart = new Chart(ctx, {
+    type: "line",
+    data: chartData,
+    options: {
+      // You can customize chart options here
+    },
+  });
 }
 
 function getDetailChartData(o, index) {
