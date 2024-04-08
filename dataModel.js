@@ -197,33 +197,33 @@ const models = {
           "height indexed": { mean: 15.2, sd: 2.0, xAxis: htArray },
         },
       },
-    },
-    "41-65": {
-      AOV: {
-        "bsa indexed": { mean: 11.7, sd: 1.4, xAxis: bsaArray },
-        "height indexed": { mean: 12.2, sd: 1.3, xAxis: htArray },
+      "41-65": {
+        AOV: {
+          "bsa indexed": { mean: 11.7, sd: 1.4, xAxis: bsaArray },
+          "height indexed": { mean: 12.2, sd: 1.3, xAxis: htArray },
+        },
+        SOV: {
+          "bsa indexed": { mean: 17.9, sd: 2.4, xAxis: bsaArray },
+          "height indexed": { mean: 18.6, sd: 2.0, xAxis: htArray },
+        },
+        STJ: {
+          "bsa indexed": { mean: 15.6, sd: 2.2, xAxis: bsaArray },
+          "height indexed": { mean: 16.2, sd: 2.0, xAxis: htArray },
+        },
       },
-      SOV: {
-        "bsa indexed": { mean: 17.9, sd: 2.4, xAxis: bsaArray },
-        "height indexed": { mean: 18.6, sd: 2.0, xAxis: htArray },
-      },
-      STJ: {
-        "bsa indexed": { mean: 15.6, sd: 2.2, xAxis: bsaArray },
-        "height indexed": { mean: 16.2, sd: 2.0, xAxis: htArray },
-      },
-    },
-    ">65": {
-      AOV: {
-        "bsa indexed": { mean: 12.1, sd: 1.6, xAxis: bsaArray },
-        "height indexed": { mean: 12.3, sd: 1.4, xAxis: htArray },
-      },
-      SOV: {
-        "bsa indexed": { mean: 19.3, sd: 2.8, xAxis: bsaArray },
-        "height indexed": { mean: 19.7, sd: 2.1, xAxis: htArray },
-      },
-      STJ: {
-        "bsa indexed": { mean: 16.6, sd: 2.6, xAxis: bsaArray },
-        "height indexed": { mean: 17.0, sd: 2.0, xAxis: htArray },
+      ">65": {
+        AOV: {
+          "bsa indexed": { mean: 12.1, sd: 1.6, xAxis: bsaArray },
+          "height indexed": { mean: 12.3, sd: 1.4, xAxis: htArray },
+        },
+        SOV: {
+          "bsa indexed": { mean: 19.3, sd: 2.8, xAxis: bsaArray },
+          "height indexed": { mean: 19.7, sd: 2.1, xAxis: htArray },
+        },
+        STJ: {
+          "bsa indexed": { mean: 16.6, sd: 2.6, xAxis: bsaArray },
+          "height indexed": { mean: 17.0, sd: 2.0, xAxis: htArray },
+        },
       },
     },
   },
@@ -242,10 +242,10 @@ function generateGenericChart(site, index) {
         return [x, (maleData.mean + 2 * maleData.sd) * x];
         break;
       case "height indexed":
-        return [x, (maleData.mean + 2 * maleData.sd) * x / 100];
+        return [x, ((maleData.mean + 2 * maleData.sd) * x) / 100];
         break;
       case "height^2.13 indexed":
-        return [x, (maleData.mean + 2 * maleData.sd) * Math.pow(x/100, 2.13)];
+        return [x, (maleData.mean + 2 * maleData.sd) * Math.pow(x / 100, 2.13)];
         break;
     }
   });
@@ -255,10 +255,13 @@ function generateGenericChart(site, index) {
         return [x, (femaleData.mean + 2 * femaleData.sd) * x];
         break;
       case "height indexed":
-        return [x, (femaleData.mean + 2 * femaleData.sd) * x / 100];
+        return [x, ((femaleData.mean + 2 * femaleData.sd) * x) / 100];
         break;
       case "height^2.13 indexed":
-        return [x, (femaleData.mean + 2 * femaleData.sd) * Math.pow(x/100, 2.13)];
+        return [
+          x,
+          (femaleData.mean + 2 * femaleData.sd) * Math.pow(x / 100, 2.13),
+        ];
         break;
     }
   });
@@ -268,17 +271,17 @@ function generateGenericChart(site, index) {
 
     datasets: [
       {
-        label: "Male",
-        data: maleData.chartData,
-        borderColor: "blue",
-        backgroundColor: "rgba(0, 0, 255, 0.2)", // Optional: Set background color
-        // You can customize other dataset properties here
-      },
-      {
         label: "Female",
         data: femaleData.chartData,
         borderColor: "salmon", // Change border color
         backgroundColor: "rgba(250, 128, 114, 0.2)", // Change background color
+        // You can customize other dataset properties here
+      },
+      {
+        label: "Male",
+        data: maleData.chartData,
+        borderColor: "blue",
+        backgroundColor: "rgba(0, 0, 255, 0.2)", // Optional: Set background color
         // You can customize other dataset properties here
       },
     ],
@@ -298,4 +301,58 @@ function generateGenericChart(site, index) {
       // You can customize chart options here
     },
   });
+}
+
+//detail charts (race or age)
+function generateDetailChart(gender, detail, site, index) {
+  index = indexType[index]; //gets the long description used in the model
+  console.log(gender, detail, site, index);
+  //either by race or age, there will be three datasets to compare
+  const ages = ["18-40", "41-65", ">65"];
+  const races = ["Asian", "Black", "White"];
+  //read the data from the models
+  var detailData = models[gender][detail];
+  //console.log(detailData);
+  //this is now either race or age collected data
+  var set;
+  if (detail == "race") {
+    set = races;
+  } else {
+    set = ages;
+  }
+  //console.log(set);
+  //build the chart data
+  const chartData = {
+    labels: index == "bsa indexed" ? bsaArray : htArray,
+  };
+  chartData.datasets = [];
+  set.forEach((item) => {
+    //console.log(item);
+    // Get the specific data from detailData based on the current item
+    var o = detailData[item][site][index];
+    //console.log(o);
+    chartData.datasets.push({
+      label: item,
+      data: getDetailChartData(o, index),
+    });
+  });
+  //console.log(chartData);
+
+}
+
+function getDetailChartData(o, index) {
+  //the obect passed in (o) is a subset of the model data
+  // like this: { mean: xx, sd: yy, xAxis: [a,b,c...] }
+  var xAxis = o.xAxis;
+  o.chartData = xAxis.map((x) => {
+    switch (index) {
+      case "bsa indexed":
+        return [x, (o.mean + 2 * o.sd) * x];
+        break;
+      case "height indexed":
+        return [x, (o.mean + 2 * o.sd) * (x / 100)];
+        break;
+    }
+  });
+  return o.chartData;
 }

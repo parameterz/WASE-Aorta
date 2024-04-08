@@ -29,7 +29,9 @@ $(document).ready(function () {
     if(generic){
       // just need the site & index
       generateGenericChart(site, index);
-
+    } else {
+      //generate the detail plots
+      generateDetailChart(gender, detail, site, index);
     }
   }
 
