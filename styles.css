@@ -25,7 +25,10 @@ label {
   color: #555;
 }
 .chart-container {
-  width: 800px;
+  position: relative;
+  margin: auto;
+  height: 80vh;
+  width: 80vw;
 }
 
 input[type="number"],

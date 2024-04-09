@@ -9,12 +9,8 @@
   <body>
     <h2>WASE Aortic Root Normal Values Visualizer</h2>
     <form id="dataForm">
-
       <label for="visualizationSelect">Select Visualization:</label>
-      <select
-        id="visualizationSelect"
-        name="visualizationSelect"
-      >
+      <select id="visualizationSelect" name="visualizationSelect">
         <option value="generic">Compare Genders</option>
         <optgroup label="Compare Gender & Race">
           <option value="race.female">Compare Females by Race</option>
@@ -32,6 +28,8 @@
           <option value="AOV.bsa">AOV: Indexed to BSA</option>
           <option value="AOV.ht">AOV: Indexed to Height</option>
           <option value="AOV.ht213">AOV: Indexed to Height^2.13</option>
+        </optgroup>
+
         <optgroup label="Aortic Sinuses of Valsalva (SOV)">
           <option value="SOV.bsa">SOV: Indexed to BSA</option>
           <option value="SOV.ht">SOV: Indexed to Height</option>
@@ -47,7 +45,7 @@
       <button>Reset</button>
     </form>
     <div>
-      <h2>Chart</h2>
+      <h2 id="chartTitle">Chart</h2>
     </div>
     <div class="chart-container">
       <canvas id="myChart"></canvas>
@@ -55,6 +53,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-autocolors"></script>
     <script src="dataModel.js"></script>
     <script src="script.js"></script>
   </body>

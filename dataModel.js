@@ -5,6 +5,8 @@ const htArray = [
 const bsaArray = [
   1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4,
 ];
+// colors
+const autocolors = window['chartjs-plugin-autocolors'];
 
 const indexType = {
   bsa: "bsa indexed",
@@ -322,6 +324,10 @@ function generateDetailChart(gender, detail, site, index) {
   }
   //console.log(set);
   //build the chart data
+  var chartTitle;
+  chartTitle = `${gender}s: ${index} ${site} by ${detail}`;
+  $('#chartTitle').text(chartTitle);
+  //console.log(chartTitle);
   const chartData = {
     labels: index == "bsa indexed" ? bsaArray : htArray,
   };
@@ -343,13 +349,20 @@ function generateDetailChart(gender, detail, site, index) {
     chartStatus.destroy();
   }
   //-- End of chart destroy
+  // color plugin?
+  //var colorScheme = gender == "female" ? "brewer.RdPu4" : "brewer.Blues4";
+  //console.log(colorScheme);
 
   const ctx = document.getElementById("myChart").getContext("2d");
   const myChart = new Chart(ctx, {
     type: "line",
     data: chartData,
+    plugins: [
+      autocolors
+    ],
     options: {
-      // You can customize chart options here
+      plugins: {
+      },
     },
   });
 }
