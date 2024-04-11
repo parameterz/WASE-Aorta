@@ -6,7 +6,7 @@ const bsaArray = [
   1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4,
 ];
 // colors
-const autocolors = window['chartjs-plugin-autocolors'];
+const autocolors = window["chartjs-plugin-autocolors"];
 
 const indexType = {
   bsa: "bsa indexed",
@@ -230,16 +230,15 @@ const models = {
     },
   },
 };
-
 // Function to generate generic chart data
-function generateGenericChart(site, index) {
-  index = indexType[index];
-  const maleData = models.male.generic[site][index];
-  const femaleData = models.female.generic[site][index];
+function generateGenericChart(site, indexingVariable) {
+  indexingVariable = indexType[indexingVariable];
+  const maleData = models.male.generic[site][indexingVariable];
+  const femaleData = models.female.generic[site][indexingVariable];
   //console.log(`male data: ${maleData}, female data: ${femaleData}`);
   // Generate chart data based on the formula (mean + 2 * sd) * x
   maleData.chartData = maleData.xAxis.map((x) => {
-    switch (index) {
+    switch (indexingVariable) {
       case "bsa indexed":
         return [x, (maleData.mean + 2 * maleData.sd) * x];
         break;
@@ -252,7 +251,7 @@ function generateGenericChart(site, index) {
     }
   });
   femaleData.chartData = femaleData.xAxis.map((x) => {
-    switch (index) {
+    switch (indexingVariable) {
       case "bsa indexed":
         return [x, (femaleData.mean + 2 * femaleData.sd) * x];
         break;
@@ -275,15 +274,15 @@ function generateGenericChart(site, index) {
       {
         label: "Female",
         data: femaleData.chartData,
-        borderColor: "salmon", // Change border color
-        backgroundColor: "rgba(250, 128, 114, 0.2)", // Change background color
+        borderColor: "#FF4D6D", // Change border color ["#FF4D6D", "#FFB3C1"],
+        backgroundColor: "#FFB3C1", // Change background color
         // You can customize other dataset properties here
       },
       {
         label: "Male",
         data: maleData.chartData,
-        borderColor: "blue",
-        backgroundColor: "rgba(0, 0, 255, 0.2)", // Optional: Set background color
+        borderColor: "#03045E",
+        backgroundColor: "#CAF0F8", // Optional: Set background color ["#03045E", "#CAF0F8"],
         // You can customize other dataset properties here
       },
     ],
@@ -306,9 +305,9 @@ function generateGenericChart(site, index) {
 }
 
 //detail charts (race or age)
-function generateDetailChart(gender, detail, site, index) {
-  index = indexType[index]; //gets the long description used in the model
-  //console.log(gender, detail, site, index);
+function generateDetailChart(gender, detail, site, indexingVariable) {
+  indexingVariable = indexType[indexingVariable]; //gets the long description used in the model
+  //console.log(gender, detail, site, indexingVariable);
   //either by race or age, there will be three datasets to compare
   const ages = ["18-40", "41-65", ">65"];
   const races = ["Asian", "Black", "White"];
@@ -324,22 +323,35 @@ function generateDetailChart(gender, detail, site, index) {
   }
   //console.log(set);
   //build the chart data
-  var chartTitle;
-  chartTitle = `${gender}s: ${index} ${site} by ${detail}`;
-  $('#chartTitle').text(chartTitle);
-  //console.log(chartTitle);
+
+  // colors
+  const colorScheme =
+    gender == "female"
+      ? [ //pinkish
+          ["#590D22", "#FFB3C1"],
+          ["#A4133C", "#FFB3C1"],
+          ["#FF4D6D", "#FFB3C1"],
+        ]
+      : [ //blueish
+          ["#03045E", "#CAF0F8"],
+          ["#0077B6", "#CAF0F8"],
+          ["#00B4D8", "#CAF0F8"],
+        ]; 
+  //console.log(colorScheme[0]);
   const chartData = {
-    labels: index == "bsa indexed" ? bsaArray : htArray,
+    labels: indexingVariable == "bsa indexed" ? bsaArray : htArray,
   };
   chartData.datasets = [];
-  set.forEach((item) => {
-    //console.log(item);
+  set.forEach((item, index) => {
+    //console.log(item, index);
     // Get the specific data from detailData based on the current item
-    var o = detailData[item][site][index];
+    var o = detailData[item][site][indexingVariable];
     //console.log(o);
     chartData.datasets.push({
       label: item,
-      data: getDetailChartData(o, index),
+      data: getDetailChartData(o, indexingVariable),
+      borderColor: colorScheme[index][0],
+      backgroundColor: colorScheme[index][1],
     });
   });
   //console.log(chartData);
@@ -349,30 +361,26 @@ function generateDetailChart(gender, detail, site, index) {
     chartStatus.destroy();
   }
   //-- End of chart destroy
-  // color plugin?
-  //var colorScheme = gender == "female" ? "brewer.RdPu4" : "brewer.Blues4";
-  //console.log(colorScheme);
 
   const ctx = document.getElementById("myChart").getContext("2d");
   const myChart = new Chart(ctx, {
     type: "line",
     data: chartData,
     plugins: [
-      autocolors
+      // autocolors
     ],
     options: {
-      plugins: {
-      },
+      plugins: {},
     },
   });
 }
 
-function getDetailChartData(o, index) {
+function getDetailChartData(o, indexingVariable) {
   //the obect passed in (o) is a subset of the model data
   // like this: { mean: xx, sd: yy, xAxis: [a,b,c...] }
   var xAxis = o.xAxis;
   o.chartData = xAxis.map((x) => {
-    switch (index) {
+    switch (indexingVariable) {
       case "bsa indexed":
         return [x, (o.mean + 2 * o.sd) * x];
         break;

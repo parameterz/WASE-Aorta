@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Data Visualization Input Form</title>
+    <meta
+      name="description"
+      content="aortic root diameters normalized to BSA and height, graphs, echo, aorta"
+    />
+    <title>WASE Aortic Root Normal Values</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
   <body>
@@ -45,10 +49,40 @@
       <button>Reset</button>
     </form>
     <div>
-      <h2 id="chartTitle">Chart</h2>
+      <h2 id="chartTitle"></h2>
     </div>
     <div class="chart-container">
       <canvas id="myChart"></canvas>
+    </div>
+    <div>
+      <p>
+        These charts represent the "upper limit of normal" (mean +2 standard
+        deviations) and are generated dynamically based on the tabular data
+        published in the manuscript.
+      </p>
+      <p>
+        As noted in the manuscript:
+        <em>"Normal values differ by age, sex and race".</em>
+      </p>
+      <p>
+        The #1 main finding of the study was "aortic dimensions were
+        larger in males compared with females, and remained so when adjusted for
+        height but not when adjusted for BSA."
+      </p>
+      
+      <p class="citation">
+        <span class="title"
+          >Normal Values of Aortic Root Size According to Age, Sex and Race:
+          Results of the World Alliance of Societies of Echocardiography
+          Study.</span
+        >
+        <span class="journal"
+          >J Am Soc Echocardiogr. 2022 Mar; 35(3): 267–274.</span
+        >
+        <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9111967/"
+          >https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9111967/</a
+        >
+      </p>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

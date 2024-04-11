@@ -33,6 +33,11 @@ $(document).ready(function () {
       //generate the detail plots
       generateDetailChart(gender, detail, site, index);
     }
+    // update chart title
+    var chartTitle = $("#visualizationSelect option:selected").text();
+    chartTitle += ": ";
+    chartTitle += $("#site option:selected").text();
+    $("#chartTitle").text(chartTitle);
   }
 
   // Function to update site select options based on visualization selection
